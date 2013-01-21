@@ -5,6 +5,8 @@
 
   async = require('async');
 
+  child_process = require('child_process');
+
   fs = require('fs');
 
   forever = require('forever');
@@ -51,7 +53,7 @@
         return async.map([proc.logFile, proc.outFile, proc.errFile].filter(function(s) {
           return s !== void 0;
         }), function(filename, cb) {
-          return fs.readFile(filename, function(err, data) {
+          return child_process.exec('tail -n ' + [1000, filename].join(' '), function (err, data) {
             var d;
             d = (data || '').toString().trim();
             if (!d || d === '\n') {
